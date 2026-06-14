@@ -23,8 +23,6 @@
             --gray-200: #e2e8f0;
             --gray-500: #64748b;
             --gray-700: #334155;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
             --radius: 10px;
         }
@@ -32,132 +30,131 @@
         body { 
             font-family: -apple-system, BlinkMacSystemFont, sans-serif;
             margin: 0; padding: 0; background-color: #f8fafc; color: var(--dark); -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
         header {
             background-color: var(--dark); color: white; padding: 12px 24px;
-            display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-md);
+            display: flex; justify-content: space-between; align-items: center;
         }
-        .logo-area { display: flex; align-items: center; gap: 10px; }
-        .logo-icon { width: 24px; height: 24px; background: var(--primary); border-radius: 6px; display: inline-block; }
         .logo-text { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; }
 
         .toolbar {
-            background: white; margin: 16px; padding: 12px 20px; border-radius: var(--radius);
-            box-shadow: var(--shadow-sm); border: 1px solid var(--gray-200);
-            display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
+            background: white; margin: 12px; padding: 12px; border-radius: var(--radius);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid var(--gray-200);
+            display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between;
         }
         
         .btn-group { display: flex; gap: 8px; align-items: center; }
         
         button {
             background-color: var(--primary); color: white; border: none; 
-            padding: 10px 18px; border-radius: 6px; cursor: pointer; 
+            padding: 10px 14px; border-radius: 6px; cursor: pointer; 
             font-weight: 600; font-size: 14px; transition: all 0.2s ease;
-            display: inline-flex; align-items: center; gap: 6px; box-shadow: var(--shadow-sm);
+            display: inline-flex; align-items: center; gap: 4px;
         }
-        button:hover { background-color: var(--primary-hover); }
         button:disabled { background-color: var(--gray-200); color: var(--gray-500); cursor: not-allowed; }
         button.secondary { background-color: white; color: var(--gray-700); border: 1px solid var(--gray-200); }
-        button.secondary:hover { background-color: var(--gray-100); }
         button.success { background-color: var(--success); }
-        button.success:hover { background-color: var(--success-hover); }
 
-        .page-indicator { font-size: 14px; font-weight: 600; color: var(--gray-700); min-width: 80px; text-align: center; }
+        .page-indicator { font-size: 14px; font-weight: 600; color: var(--gray-700); }
 
         .instruction-banner {
-            margin: 0 16px 16px 16px; padding: 12px 16px; background-color: #eff6ff;
-            border-left: 4px solid var(--primary); border-radius: 4px; font-size: 13px; color: #1e40af; line-height: 1.5;
+            margin: 0 12px 12px 12px; padding: 10px 14px; background-color: #eff6ff;
+            border-left: 4px solid var(--primary); border-radius: 4px; font-size: 13px; color: #1e40af;
         }
 
-        /* 修正點一：在外層容器加入 touch-action: pany，允許畫面上傳滾動，但內部物件不衝突 */
+        /* 工作區與 PDF 面板：全面阻斷手機彈性滾動造成的位移 */
         .workspace {
-            margin: 0 16px 24px 16px; background: var(--gray-100); border-radius: var(--radius);
-            padding: 24px; display: flex; justify-content: center; overflow: auto;
-            border: 1px dashed var(--gray-200); max-height: 70vh; min-height: 500px; box-sizing: border-box;
-            touch-action: pany;
+            margin: 0 12px 24px 12px; background: var(--gray-100); border-radius: var(--radius);
+            padding: 12px; display: flex; justify-content: center; overflow: auto;
+            border: 1px dashed var(--gray-200); max-height: 65vh; min-height: 400px; box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
         }
         
-        /* 修正點二：PDF 包裹層，徹底鎖定不可亂滾 */
         #pdf-wrapper { 
             position: relative; box-shadow: var(--shadow-lg); background: white; border-radius: 4px; 
-            touch-action: none; -webkit-user-select: none; user-select: none;
+            user-select: none; -webkit-user-select: none;
         }
         #pdf-canvas { display: block; }
 
-        /* 修正點三：簽名框必須完全阻斷原生的手勢滾動 */
+        /* 🚀 升級版簽名控制框 🚀 */
         .draggable-signature {
             position: absolute; left: 0; top: 0; width: 140px; height: 55px;
-            border: 2px dashed var(--primary); background: rgba(37, 99, 235, 0.1);
-            cursor: move; display: none; z-index: 999;
-            box-sizing: border-box;
-            touch-action: none; /* 核心：防止手機網頁跟著滾動 */
-            -webkit-user-select: none; user-select: none;
+            border: 2px solid var(--primary); background: rgba(37, 99, 235, 0.12);
+            cursor: move; display: none; z-index: 9999;
+            box-sizing: border-box; touch-action: none;
         }
-        .draggable-signature:hover { box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15); border-style: solid; }
-        .draggable-signature img { width: 100%; height: 100%; pointer-events: none; user-select: none; }
+        .draggable-signature img { width: 100%; height: 100%; pointer-events: none; }
         
+        /* 右下角縮放手柄 */
         .draggable-signature::after {
             content: ''; position: absolute; right: -6px; bottom: -6px; width: 14px; height: 14px;
-            background: var(--primary); border-radius: 50%; border: 2px solid white; cursor: se-resize;
+            background: var(--primary); border-radius: 50%; border: 2px solid white; cursor: se-resize; z-index: 10;
         }
 
+        /* 📱 手機救星：簽名框上方依附的虛擬微調方向盤 */
+        .pad-controller {
+            position: absolute; top: -45px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 3px; background: var(--dark); padding: 4px 8px; 
+            border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 99999;
+        }
+        .pad-btn {
+            width: 28px; height: 28px; background: #334155; border: none; border-radius: 50%;
+            color: white; font-size: 12px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; padding: 0; user-select: none; -webkit-user-select: none;
+            touch-action: none;
+        }
+        .pad-btn:active { background: var(--primary); }
+
+        /* 簽名彈窗 */
         .modal-overlay { 
             position: fixed; top:0; left:0; width:100%; height:100%; 
             background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px);
-            display: flex; align-items: center; justify-content: center; z-index: 1000; display: none; 
+            display: flex; align-items: center; justify-content: center; z-index: 100000; display: none; 
         }
-        .modal-content { 
-            background: white; padding: 24px; border-radius: var(--radius); 
-            width: 90%; max-width: 480px; box-shadow: var(--shadow-lg); border: 1px solid var(--gray-200);
-        }
-        .modal-content h3 { margin-top: 0; font-size: 18px; color: var(--dark); font-weight: 700; }
-        .sig-canvas-wrapper { 
-            border: 1px solid var(--gray-200); background: #fafafa; 
-            margin: 18px 0; border-radius: 6px; overflow: hidden;
-        }
-        #signature-canvas { width: 100%; height: 240px; display: block; cursor: crosshair; touch-action: none; }
+        .modal-content { background: white; padding: 20px; border-radius: var(--radius); width: 90%; max-width: 440px; }
+        .sig-canvas-wrapper { border: 1px solid var(--gray-200); background: #fafafa; margin: 15px 0; border-radius: 6px; overflow: hidden; }
+        #signature-canvas { width: 100%; height: 220px; display: block; touch-action: none; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo-area">
-        <div class="logo-icon"></div>
-        <div class="logo-text">Enterprise Sign</div>
-    </div>
+    <div class="logo-text">Enterprise Sign</div>
 </header>
 
 <div class="toolbar">
     <div class="btn-group">
         <input type="file" id="file-input" accept="application/pdf" style="display: none;" />
-        <button id="upload-btn" class="secondary" onclick="document.getElementById('file-input').click()">
-            📄 更換合約文件
-        </button>
-        <button id="open-sig-btn" disabled>
-            ✍️ 點擊開始簽名
-        </button>
+        <button id="upload-btn" class="secondary" onclick="document.getElementById('file-input').click()">📄 更換文件</button>
+        <button id="open-sig-btn" disabled>✍️ 開始簽名</button>
     </div>
     
     <div class="btn-group" id="pagination-controls" style="display: none;">
         <button id="prev-page-btn" class="secondary">◀</button>
-        <span id="page-num-display" class="page-indicator">第 1 / 1 頁</span>
+        <span id="page-num-display" class="page-indicator">1 / 1</span>
         <button id="next-page-btn" class="secondary">▶</button>
     </div>
 
-    <button id="download-pdf-btn" class="success" disabled>
-        💾 儲存並導出文件
-    </button>
+    <button id="download-pdf-btn" class="success" disabled>💾 儲存導出</button>
 </div>
 
 <div class="instruction-banner">
-    <strong>💡 手機簽署技巧：</strong> 簽名完成後，用單指<strong>壓住藍色虛線框中心</strong>即可拖曳位置。如欲縮放，請拖曳右下角的<strong>圓形藍色手柄</strong>。
+    <strong>📱 行動端操作提示：</strong> 簽名後若手指無法拖曳框框，請直接點擊或按住簽名框上方的 <strong>◀ ▲ ▼ ▶ 按鈕</strong> 即可完美移動位置！
 </div>
 
 <div class="workspace">
     <div id="pdf-wrapper">
         <canvas id="pdf-canvas"></canvas>
+        
         <div id="drag-sig" class="draggable-signature">
+            <div class="pad-controller">
+                <button class="pad-btn" id="pad-l" title="左">◀</button>
+                <button class="pad-btn" id="pad-u" title="上">▲</button>
+                <button class="pad-btn" id="pad-d" title="下">▼</button>
+                <button class="pad-btn" id="pad-r" title="右">▶</button>
+            </div>
             <img id="sig-preview-img" src="" alt="Signature">
         </div>
     </div>
@@ -166,11 +163,9 @@
 <div class="modal-overlay" id="sig-modal">
     <div class="modal-content">
         <h3>請在下方空白區域簽名</h3>
-        <div class="sig-canvas-wrapper">
-            <canvas id="signature-canvas"></canvas>
-        </div>
+        <div class="sig-canvas-wrapper"><canvas id="signature-canvas"></canvas></div>
         <div class="btn-group" style="justify-content: flex-end; width: 100%;">
-            <button class="secondary" id="clear-sig-btn">清除重寫</button>
+            <button class="secondary" id="clear-sig-btn">清除</button>
             <button class="secondary" id="close-modal-btn" style="color: var(--danger); background: var(--danger-bg); border: none;">取消</button>
             <button id="save-sig-btn">確認簽章</button>
         </div>
@@ -183,17 +178,12 @@
     let pdfRawBytes = null, pdfDoc = null, currentPageNum = 1, totalPages = 1;
     let sigPosition = { x: 0, y: 0, width: 140, height: 55 }, signaturePad = null, signatureImgBase64 = null;
 
-    const fileInput = document.getElementById('file-input');
-    const openSigBtn = document.getElementById('open-sig-btn');
-    const downloadPdfBtn = document.getElementById('download-pdf-btn');
-    const pdfCanvas = document.getElementById('pdf-canvas');
-    const pdfWrapper = document.getElementById('pdf-wrapper');
-    const dragSig = document.getElementById('drag-sig');
-    const sigPreviewImg = document.getElementById('sig-preview-img');
-    const sigModal = document.getElementById('sig-modal');
-    const signatureCanvas = document.getElementById('signature-canvas');
+    const fileInput = document.getElementById('file-input'), openSigBtn = document.getElementById('open-sig-btn');
+    const downloadPdfBtn = document.getElementById('download-pdf-btn'), pdfCanvas = document.getElementById('pdf-canvas');
+    const pdfWrapper = document.getElementById('pdf-wrapper'), dragSig = document.getElementById('drag-sig');
+    const sigPreviewImg = document.getElementById('sig-preview-img'), sigModal = document.getElementById('sig-modal'), signatureCanvas = document.getElementById('signature-canvas');
 
-    // 自動加載合約測試
+    // 自動加載合約
     window.addEventListener('DOMContentLoaded', async () => {
         try {
             const response = await fetch('contract.pdf');
@@ -201,7 +191,7 @@
                 const arrayBuffer = await response.arrayBuffer();
                 loadPDFBytes(new Uint8Array(arrayBuffer));
             }
-        } catch (e) { console.log("等待手動載入 PDF"); }
+        } catch (e) { console.log("等待手動載入"); }
     });
 
     fileInput.addEventListener('change', async (e) => {
@@ -230,7 +220,7 @@
         pdfWrapper.style.width = viewport.width + 'px'; pdfWrapper.style.height = viewport.height + 'px';
 
         await page.render({ canvasContext: pdfCanvas.getContext('2d'), viewport: viewport }).promise;
-        document.getElementById('page-num-display').innerText = `第 ${pageNum} / ${totalPages} 頁`;
+        document.getElementById('page-num-display').innerText = `${pageNum} / ${totalPages}`;
         
         if (signatureImgBase64) {
             applyTransform(dragSig, sigPosition.x, sigPosition.y, sigPosition.width, sigPosition.height);
@@ -244,8 +234,7 @@
         sigModal.style.display = 'flex';
         if (!signaturePad) {
             const ratio = Math.max(window.devicePixelRatio || 1, 1);
-            signatureCanvas.width = signatureCanvas.offsetWidth * ratio;
-            signatureCanvas.height = signatureCanvas.offsetHeight * ratio;
+            signatureCanvas.width = signatureCanvas.offsetWidth * ratio; signatureCanvas.height = signatureCanvas.offsetHeight * ratio;
             signatureCanvas.getContext("2d").scale(ratio, ratio);
             signaturePad = new SignaturePad(signatureCanvas, { backgroundColor: 'rgba(255, 255, 255, 0)', penColor: '#0f172a' });
         } else { signaturePad.clear(); }
@@ -260,7 +249,7 @@
         sigPreviewImg.src = signatureImgBase64;
         
         dragSig.style.display = 'block';
-        sigPosition = { x: 30, y: 30, width: 140, height: 55 };
+        sigPosition = { x: 40, y: 40, width: 140, height: 55 };
         applyTransform(dragSig, sigPosition.x, sigPosition.y, sigPosition.width, sigPosition.height);
         
         sigModal.style.display = 'none';
@@ -268,33 +257,65 @@
     });
 
     function applyTransform(target, x, y, w, h) {
-        target.style.transform = `translate(${x}px, ${y}px)`;
+        // 限制不要移出 PDF 邊界
+        const maxW = pdfCanvas.width - w;
+        const maxH = pdfCanvas.height - h;
+        sigPosition.x = Math.max(0, Math.min(x, maxW));
+        sigPosition.y = Math.max(0, Math.min(y, maxH));
+        
+        target.style.transform = `translate(${sigPosition.x}px, ${sigPosition.y}px)`;
         target.style.width = w + 'px'; target.style.height = h + 'px';
     }
 
-    // --- 修正點四：優化 Interact.js 的手機觸控設定 ---
+    // --- 虛擬方向盤核心邏輯 (支援點擊與長按連續移動) ---
+    const moveStep = 6; // 每按一下移動的像素距離
+    let moveInterval = null;
+
+    function startMove(dir) {
+        if (moveInterval) clearInterval(moveInterval);
+        doMove(dir);
+        moveInterval = setInterval(() => doMove(dir), 40); // 長按每 40 毫秒移動一次
+    }
+
+    function stopMove() {
+        if (moveInterval) { clearInterval(moveInterval); moveInterval = null; }
+    }
+
+    function doMove(dir) {
+        let { x, y, width, height } = sigPosition;
+        if (dir === 'u') y -= moveStep;
+        if (dir === 'd') y += moveStep;
+        if (dir === 'l') x -= moveStep;
+        if (dir === 'r') x += moveStep;
+        applyTransform(dragSig, x, y, width, height);
+    }
+
+    // 綁定虛擬按鈕事件（同時相容滑鼠與手機觸控長按）
+    const btnConfigs = [ {id: 'pad-u', dir: 'u'}, {id: 'pad-d', dir: 'd'}, {id: 'pad-l', dir: 'l'}, {id: 'pad-r', dir: 'r'} ];
+    btnConfigs.forEach(config => {
+        const btn = document.getElementById(config.id);
+        btn.addEventListener('mousedown', (e) => { e.preventDefault(); startMove(config.dir); });
+        btn.addEventListener('touchstart', (e) => { e.preventDefault(); e.stopPropagation(); startMove(config.dir); });
+    });
+    window.addEventListener('mouseup', stopMove);
+    window.addEventListener('touchend', stopMove);
+
+    // --- 保持原有手勢（雙重保障） ---
     interact('#drag-sig').resizable({
-        edges: { left: false, right: true, bottom: true, top: false }, // 手機上只保留右下角手柄縮放，更符合操作直覺
+        edges: { right: true, bottom: true },
         listeners: { move(event) {
             let { x, y } = sigPosition;
-            x += event.deltaRect.left; y += event.deltaRect.top;
             sigPosition = { x, y, width: event.rect.width, height: event.rect.height };
             applyTransform(event.target, x, y, event.rect.width, event.rect.height);
         }},
-        modifiers: [
-            interact.modifiers.restrictEdges({ outer: 'parent' }), 
-            interact.modifiers.restrictSize({ min: { width: 50, height: 20 } })
-        ]
+        modifiers: [interact.modifiers.restrictSize({ min: { width: 50, height: 20 } })]
     }).draggable({
-        // 修正：加入手機觸控防震動與防誤觸
-        inertia: true,
         listeners: { move(event) {
-            sigPosition.x += event.dx; sigPosition.y += event.dy;
-            applyTransform(event.target, sigPosition.x, sigPosition.y, sigPosition.width, sigPosition.height);
-        }},
-        modifiers: [interact.modifiers.restrictRect({ restriction: 'parent' })]
+            applyTransform(event.target, sigPosition.x + event.dx, sigPosition.y + event.dy, sigPosition.width, sigPosition.height);
+        }}
     });
 
+    // 儲存導出
     downloadPdfBtn.addEventListener('click', async () => {
         if (!pdfRawBytes || !signatureImgBase64) return;
         try {
